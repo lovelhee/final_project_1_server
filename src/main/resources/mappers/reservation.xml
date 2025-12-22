@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ssafy.lasttable.reservation.repository.ReservationMapper">
+
+	<!-- 예약 추가 -->
+	<insert id="insertReservation" parameterType="Reservation"
+		useGeneratedKeys="true" keyProperty="reservationId">
+		INSERT INTO reservation (user_id, status, reserved_at, deposit_amount, img)
+		VALUES (#{userId}, 'RESERVED', #{reservedAt}, #{depositAmount},
+		#{img})
+	</insert>
+
+	<!-- 예약 전체 조회 -->
+	<select id="findAll" resultType="Reservation">
+		SELECT * FROM reservation ORDER BY created_at DESC
+	</select>
+
+	<!-- 예약 취소 -->
+	<update id="cancelReservation">
+		UPDATE reservation
+		SET status = 'AVAILABLE',
+		canceled_at = #{canceledAt},
+		user_id = NULL
+		WHERE reservation_id = #{reservationId}
+	</update>
+
+	<!-- 라스트 테이블 (재판매 가능한 예약) 조회 -->
+	<select id="findLastTable" resultType="Reservation">
+		SELECT * FROM reservation
+		WHERE status = 'AVAILABLE'
+		ORDER BY reserved_at ASC
+	</select>
+
+	<!-- 예약 ID로 예약 조회 -->
+	<select id="findById" resultType="Reservation">
+		SELECT * FROM reservation WHERE reservation_id = #{reservationId}
+	</select>
+
+</mapper>
