@@ -24,19 +24,4 @@ public class MenuServiceImpl implements MenuService {
     public Menu getMenuById(Long menuId) {
         return menuMapper.findById(menuId);
     }
-
-    @Override
-    public void addMenu(Menu menu) {
-        menuMapper.insertMenu(menu);
-    }
-
-    @Override
-    public void updateMenu(Menu menu) {
-        menuMapper.updateMenu(menu);
-    }
-
-    @Override
-    public void deleteMenu(Long menuId) {
-        menuMapper.deleteMenu(menuId);
-    }
 }
