@@ -7,7 +7,9 @@ import com.ssafy.lasttable.user.dto.LoginRequest;
 import com.ssafy.lasttable.user.entity.User;
 import com.ssafy.lasttable.user.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -48,14 +50,24 @@ public class UserRestController {
                             : ResponseEntity.ok("User ID is available");
     }
     
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) { // User 대신 LoginRequest 사용
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         User user = userService.login(loginRequest.getUserId(), loginRequest.getPwd());
         
         if (user != null) {
-            return ResponseEntity.ok(user);
+           
+            String token = "generated-jwt-token-string"; 
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("accessToken", "서버가생성한토큰"); 
+            response.put("userId", user.getUserId());    
+            response.put("name", user.getName());      
+            response.put("phone", user.getPhone());      
+            return ResponseEntity.ok(response);
+            
         } else {
-            return ResponseEntity.status(401).body("아이디 또는 비밀번호가 틀렸습니다.");
+            return ResponseEntity.status(401).body("로그인 실패: 아이디 또는 비밀번호가 틀립니다.");
         }
     }
 }
