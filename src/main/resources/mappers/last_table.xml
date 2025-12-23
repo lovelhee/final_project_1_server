@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.lasttable.last_table.repository.LastTableMapper">
+
+	<!-- 라스트테이블 전체 -->
+	<select id="findAllAvailable" resultType="Reservation">
+		SELECT *
+		FROM reservation
+		WHERE status = 'AVAILABLE'
+		AND reserved_at >= NOW()
+		ORDER BY reserved_at ASC
+	</select>
+
+
+	<!-- 메뉴 ID로 -->
+	<select id="findByMenuId" resultType="Reservation">
+		SELECT *
+		FROM reservation
+		WHERE status = 'AVAILABLE'
+		AND menu_id = #{menuId}
+		ORDER BY reserved_at ASC
+	</select>
+
+	<!-- 유저 ID로 -->
+	<select id="findByUserId" resultType="Reservation">
+		SELECT *
+		FROM reservation
+		WHERE status = 'AVAILABLE'
+		AND reserved_at >= NOW()
+		AND user_id = #{userId}
+		ORDER BY reserved_at ASC
+	</select>
+
+</mapper>
