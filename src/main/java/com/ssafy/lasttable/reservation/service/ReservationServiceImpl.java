@@ -71,11 +71,36 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationMapper.findLastTable();
 	}
 	
-	// ReservationServiceImpl.java 클래스 내부에 추가
-
 	@Override
 	public List<Reservation> getReservationsByUserId(String userId) {
 	    // Mapper를 호출하여 DB에서 특정 사용자의 예약 목록을 가져옵니다.
 	    return reservationMapper.getReservationsByUserId(userId);
 	}
+	
+
+	@Override
+	@Transactional
+	public Reservation claim(Long reservationId, String userId) {
+
+	    // 1. 사용자 존재 여부 체크
+	    boolean userExists = reservationMapper.checkUserExists(userId);
+	    if (!userExists) {
+	        throw new IllegalArgumentException("존재하지 않는 사용자입니다");
+	    }
+
+	    // 2. 라스트테이블 인수 시도
+	    int updated = reservationMapper.claimReservation(
+	            reservationId,
+	            userId
+	    );
+
+	    // 3. 업데이트 실패 = 이미 누군가 선점
+	    if (updated == 0) {
+	        throw new IllegalStateException("이미 다른 사용자가 예약했습니다");
+	    }
+
+	    // 4. 최신 데이터 반환
+	    return reservationMapper.findById(reservationId);
+	}
+
 }

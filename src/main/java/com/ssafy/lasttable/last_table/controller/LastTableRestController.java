@@ -1,6 +1,6 @@
 package com.ssafy.lasttable.last_table.controller;
 
-import com.ssafy.lasttable.reservation.entity.Reservation;
+import com.ssafy.lasttable.last_table.entity.LastTableResponse;
 import com.ssafy.lasttable.last_table.service.LastTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +15,20 @@ public class LastTableRestController {
     @Autowired
     private LastTableService lastTableService;
 
-    // 1. 라스트테이블 전체 조회
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAll() {
+    public ResponseEntity<List<LastTableResponse>> getAll() {
         return ResponseEntity.ok(lastTableService.findAll());
     }
 
-    // 2. 메뉴 ID로 조회
     @GetMapping("/menu/{menuId}")
-    public ResponseEntity<List<Reservation>> getByMenuId(
+    public ResponseEntity<List<LastTableResponse>> getByMenuId(
             @PathVariable Long menuId
     ) {
         return ResponseEntity.ok(lastTableService.findByMenuId(menuId));
     }
 
-    // 3. 유저 ID로 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Reservation>> getByUserId(
+    public ResponseEntity<List<LastTableResponse>> getByUserId(
             @PathVariable String userId
     ) {
         return ResponseEntity.ok(lastTableService.findByUserId(userId));

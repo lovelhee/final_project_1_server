@@ -1,6 +1,7 @@
 package com.ssafy.lasttable.reservation.controller;
 
 import com.ssafy.lasttable.reservation.entity.Reservation;
+import com.ssafy.lasttable.reservation.entity.ReservationClaimRequest;
 import com.ssafy.lasttable.reservation.entity.ReservationCreateRequest;
 import com.ssafy.lasttable.reservation.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,4 +90,30 @@ public class ReservationRestController {
 	    List<Reservation> userReservations = reservationService.getReservationsByUserId(userId);
 	    return ResponseEntity.ok(userReservations);
 	}
+	
+	// 재판매...
+	@PostMapping("/{reservationId}/claim")
+	public ResponseEntity<?> claim(
+	        @PathVariable Long reservationId,
+	        @RequestBody ReservationClaimRequest request
+	) {
+	    try {
+	        Reservation result = reservationService.claim(
+	                reservationId,
+	                request.getUserId()
+	        );
+	        return ResponseEntity.ok(result);
+
+	    } catch (IllegalStateException e) {
+	        Map<String, String> error = new HashMap<>();
+	        error.put("error", e.getMessage());
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+	    } catch (Exception e) {
+	        Map<String, String> error = new HashMap<>();
+	        error.put("error", "라스트테이블 예약 처리 중 오류가 발생했습니다");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	    }
+	}
+
 }

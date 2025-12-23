@@ -1,38 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.ssafy.lasttable.last_table.repository.LastTableMapper">
 
 	<!-- 라스트테이블 전체 -->
-	<select id="findAllAvailable" resultType="Reservation">
-		SELECT *
-		FROM reservation
-		WHERE status = 'AVAILABLE'
-		AND reserved_at >= NOW()
-		ORDER BY reserved_at ASC
+	<select id="findAllAvailable"
+		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
+		SELECT
+		r.reservation_id AS reservationId,
+		r.reserved_at AS reservedAt,
+		r.people_count AS peopleCount,
+		r.deposit_amount AS depositAmount,
+
+		m.menu_id AS menuId,
+		m.name AS menuName,
+		m.price AS menuPrice,
+		m.img AS menuImg,
+		m.description AS menuDescription
+		FROM reservation r
+		JOIN menu m ON r.menu_id = m.menu_id
+		WHERE r.status = 'AVAILABLE'
+		AND r.reserved_at >= NOW()
+		ORDER BY r.reserved_at ASC
 	</select>
 
 
 	<!-- 메뉴 ID로 -->
-	<select id="findByMenuId" resultType="Reservation">
-		SELECT *
-		FROM reservation
-		WHERE status = 'AVAILABLE'
-		AND menu_id = #{menuId}
-		ORDER BY reserved_at ASC
+	<select id="findByMenuId"
+		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
+		SELECT
+		r.reservation_id AS reservationId,
+		r.reserved_at AS reservedAt,
+		r.people_count AS peopleCount,
+		r.deposit_amount AS depositAmount,
+
+		m.menu_id AS menuId,
+		m.name AS menuName,
+		m.price AS menuPrice,
+		m.img AS menuImg,
+		m.description AS menuDescription
+		FROM reservation r
+		JOIN menu m ON r.menu_id = m.menu_id
+		WHERE r.status = 'AVAILABLE'
+		AND r.menu_id = #{menuId}
+		AND r.reserved_at >= NOW()
+		ORDER BY r.reserved_at ASC
 	</select>
 
-	<!-- 유저 ID로 -->
-	<select id="findByUserId" resultType="Reservation">
-		SELECT *
-		FROM reservation
-		WHERE status = 'AVAILABLE'
-		AND reserved_at >= NOW()
-		AND user_id = #{userId}
-		ORDER BY reserved_at ASC
+	<select id="findByUserId"
+		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
+		SELECT
+		r.reservation_id AS reservationId,
+		r.reserved_at AS reservedAt,
+		r.people_count AS peopleCount,
+		r.deposit_amount AS depositAmount,
+
+		m.menu_id AS menuId,
+		m.name AS menuName,
+		m.price AS menuPrice,
+		m.img AS menuImg,
+		m.description AS menuDescription
+		FROM reservation r
+		JOIN menu m ON r.menu_id = m.menu_id
+		WHERE r.status = 'AVAILABLE'
+		AND r.user_id = #{userId}
+		AND r.reserved_at >= NOW()
+		ORDER BY r.reserved_at ASC
 	</select>
+
 
 </mapper>

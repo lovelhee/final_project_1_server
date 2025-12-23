@@ -26,4 +26,11 @@ public interface ReservationMapper {
 	boolean checkUserExists(@Param("userId") String userId);
 	
 	List<Reservation> getReservationsByUserId(@Param("userId") String userId);
+	
+	// 라스트테이블 인수
+	int claimReservation(
+	    @Param("reservationId") Long reservationId,
+	    @Param("userId") String userId
+	);
+
 }

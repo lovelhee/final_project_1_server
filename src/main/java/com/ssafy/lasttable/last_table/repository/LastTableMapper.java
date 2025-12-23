@@ -1,6 +1,6 @@
 package com.ssafy.lasttable.last_table.repository;
 
-import com.ssafy.lasttable.reservation.entity.Reservation;
+import com.ssafy.lasttable.last_table.entity.LastTableResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface LastTableMapper {
 
-    List<Reservation> findAllAvailable();
+    List<LastTableResponse> findAllAvailable();
 
-    List<Reservation> findByMenuId(@Param("menuId") Long menuId);
+    List<LastTableResponse> findByMenuId(@Param("menuId") Long menuId);
 
-    List<Reservation> findByUserId(@Param("userId") String userId);
+    List<LastTableResponse> findByUserId(@Param("userId") String userId);
 }

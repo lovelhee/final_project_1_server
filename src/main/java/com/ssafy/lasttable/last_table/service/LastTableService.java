@@ -1,13 +1,13 @@
 package com.ssafy.lasttable.last_table.service;
 
-import com.ssafy.lasttable.reservation.entity.Reservation;
+import com.ssafy.lasttable.last_table.entity.LastTableResponse;
 import java.util.List;
 
 public interface LastTableService {
 
-    List<Reservation> findAll();
+    List<LastTableResponse> findAll();
 
-    List<Reservation> findByMenuId(Long menuId);
+    List<LastTableResponse> findByMenuId(Long menuId);
 
-    List<Reservation> findByUserId(String userId);
+    List<LastTableResponse> findByUserId(String userId);
 }
