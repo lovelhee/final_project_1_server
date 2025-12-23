@@ -7,18 +7,21 @@ import java.util.List;
 
 @Mapper
 public interface ReservationMapper {
-	// 예약 생성
-	int insertReservation(Reservation reservation);
+	void insertReservation(Reservation reservation);
 
-	// 전체 조회
 	List<Reservation> findAll();
 
-	// 예약 취소
-	int cancelReservation(@Param("reservationId") Long reservationId, @Param("canceledAt") String canceledAt);
+	void cancelReservation(@Param("reservationId") Long reservationId, @Param("canceledAt") String canceledAt);
 
-	// 라스트 테이블 조회
 	List<Reservation> findLastTable();
 
-	// ID로 단건 조회
 	Reservation findById(Long reservationId);
+
+	List<String> findReservedTimesByDate(@Param("date") String date, @Param("menuId") Long menuId);
+
+	// 중복 예약 체크
+	boolean checkDuplicateReservation(@Param("reservedAt") String reservedAt, @Param("menuId") Long menuId);
+
+	// 사용자 존재 여부 확인
+	boolean checkUserExists(@Param("userId") String userId);
 }

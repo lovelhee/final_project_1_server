@@ -4,7 +4,11 @@ import com.ssafy.lasttable.reservation.entity.Reservation;
 import com.ssafy.lasttable.reservation.repository.ReservationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -13,7 +17,25 @@ public class ReservationServiceImpl implements ReservationService {
 	private ReservationMapper reservationMapper;
 
 	@Override
+	@Transactional
 	public Reservation addReservation(Reservation reservation) {
+		// 1. 해당 시간대에 이미 예약이 있는지 확인
+		boolean isDuplicate = reservationMapper.checkDuplicateReservation(reservation.getReservedAt(),
+				reservation.getMenuId());
+
+		if (isDuplicate) {
+			throw new IllegalStateException("해당 시간은 이미 예약되었습니다");
+		}
+
+		// 2. user_id 존재 여부 확인
+		if (reservation.getUserId() != null) {
+			boolean userExists = reservationMapper.checkUserExists(reservation.getUserId());
+			if (!userExists) {
+				throw new IllegalArgumentException("존재하지 않는 사용자입니다");
+			}
+		}
+
+		// 3. 예약 생성
 		reservationMapper.insertReservation(reservation);
 		return reservationMapper.findById(reservation.getReservationId());
 	}
@@ -25,10 +47,23 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation cancel(Long reservationId, String canceledAt) {
-		// 매퍼에 id와 취소시간 전달
 		reservationMapper.cancelReservation(reservationId, canceledAt);
-		// 취소 완료된 데이터 다시 조회해서 반환
 		return reservationMapper.findById(reservationId);
+	}
+
+	@Override
+	public List<String> getAvailableTimes(String date, Long menuId) {
+		// 12시부터 21시까지의 모든 시간대 생성
+		List<String> allTimes = new ArrayList<>();
+		for (int hour = 12; hour <= 21; hour++) {
+			allTimes.add(String.format("%02d:00", hour));
+		}
+
+		// 해당 날짜에 이미 예약된 시간 조회
+		List<String> reservedTimes = reservationMapper.findReservedTimesByDate(date, menuId);
+
+		// 예약되지 않은 시간만 필터링하여 반환
+		return allTimes.stream().filter(time -> !reservedTimes.contains(time)).collect(Collectors.toList());
 	}
 
 	@Override

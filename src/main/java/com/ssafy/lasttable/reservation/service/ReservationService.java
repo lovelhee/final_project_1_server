@@ -10,5 +10,7 @@ public interface ReservationService {
 
 	Reservation cancel(Long reservationId, String canceledAt);
 
+	List<String> getAvailableTimes(String date, Long menuId);
+
 	List<Reservation> getLastTable();
 }
