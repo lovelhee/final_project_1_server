@@ -70,4 +70,12 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<Reservation> getLastTable() {
 		return reservationMapper.findLastTable();
 	}
+	
+	// ReservationServiceImpl.java 클래스 내부에 추가
+
+	@Override
+	public List<Reservation> getReservationsByUserId(String userId) {
+	    // Mapper를 호출하여 DB에서 특정 사용자의 예약 목록을 가져옵니다.
+	    return reservationMapper.getReservationsByUserId(userId);
+	}
 }

@@ -13,4 +13,6 @@ public interface ReservationService {
 	List<String> getAvailableTimes(String date, Long menuId);
 
 	List<Reservation> getLastTable();
+	
+	List<Reservation> getReservationsByUserId(String userId);
 }

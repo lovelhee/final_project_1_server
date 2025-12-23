@@ -24,4 +24,6 @@ public interface ReservationMapper {
 
 	// 사용자 존재 여부 확인
 	boolean checkUserExists(@Param("userId") String userId);
+	
+	List<Reservation> getReservationsByUserId(@Param("userId") String userId);
 }

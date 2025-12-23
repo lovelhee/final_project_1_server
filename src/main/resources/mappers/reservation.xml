@@ -78,5 +78,11 @@
         FROM users
         WHERE user_id = #{userId}
     </select>
+    
+    <select id="getReservationsByUserId" resultType="com.ssafy.lasttable.reservation.entity.Reservation">
+        SELECT * FROM reservation 
+        WHERE user_id = #{userId}
+        ORDER BY reserved_at DESC
+    </select>
 
 </mapper>

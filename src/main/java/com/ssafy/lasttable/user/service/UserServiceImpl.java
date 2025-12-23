@@ -43,4 +43,10 @@ public class UserServiceImpl implements UserService {
 	    }
 	    return null;
 	}
+	
+	@Override
+	public void updateName(String userId, String newName) {
+	    // 매퍼를 통해 DB의 이름을 변경합니다.
+	    userMapper.updateName(userId, newName); // 👈 매퍼에 이 메서드가 정의되어야 합니다.
+	}
 }
