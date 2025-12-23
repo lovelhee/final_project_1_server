@@ -4,35 +4,16 @@
 
     <!-- 모든 메뉴 조회 -->
     <select id="findAll" resultType="com.ssafy.lasttable.menu.entity.Menu">
-        SELECT menu_id, name, category, price, is_active, img
+        SELECT *
         FROM menu
         ORDER BY menu_id
     </select>
 
     <!-- 메뉴 ID로 조회 -->
     <select id="findById" resultType="com.ssafy.lasttable.menu.entity.Menu">
-        SELECT menu_id, name, category, price, is_active, img
+        SELECT *
         FROM menu
         WHERE menu_id = #{menuId}
     </select>
-
-    <!-- 메뉴 추가 -->
-    <insert id="insertMenu" parameterType="com.ssafy.lasttable.menu.entity.Menu">
-        INSERT INTO menu (name, category, price, is_active, img)
-        VALUES (#{name}, #{category}, #{price}, #{isActive}, #{img})
-    </insert>
-
-    <!-- 메뉴 수정 -->
-    <update id="updateMenu" parameterType="com.ssafy.lasttable.menu.entity.Menu">
-        UPDATE menu
-        SET name = #{name}, category = #{category}, price = #{price}, is_active = #{isActive}, img = #{img}
-        WHERE menu_id = #{menuId}
-    </update>
-
-    <!-- 메뉴 삭제 -->
-    <delete id="deleteMenu">
-        DELETE FROM menu
-        WHERE menu_id = #{menuId}
-    </delete>
-
+    
 </mapper>

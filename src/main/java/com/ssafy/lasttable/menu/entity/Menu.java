@@ -7,6 +7,9 @@ public class Menu {
 	private int price;
 	private boolean isActive;
 	private String img;
+	private String description; // 짧은 설명
+	private String longDescription; // 긴 설명
+	private String sushiPieces; // 초밥 개수 (예: 광어1 참치1 연어2)
 
 	public Long getMenuId() {
 		return menuId;
@@ -54,5 +57,29 @@ public class Menu {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLongDescription() {
+		return longDescription;
+	}
+
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
+	}
+
+	public String getSushiPieces() {
+		return sushiPieces;
+	}
+
+	public void setSushiPieces(String sushiPieces) {
+		this.sushiPieces = sushiPieces;
 	}
 }
