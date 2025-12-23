@@ -3,6 +3,7 @@ package com.ssafy.lasttable.user.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.ssafy.lasttable.user.dto.LoginRequest;
 import com.ssafy.lasttable.user.entity.User;
 import com.ssafy.lasttable.user.service.UserService;
 
@@ -45,5 +46,16 @@ public class UserRestController {
         boolean isDuplicated = userService.isUserIdDuplicated(userId);
         return isDuplicated ? ResponseEntity.status(400).body("User ID is already taken") 
                             : ResponseEntity.ok("User ID is available");
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) { // User 대신 LoginRequest 사용
+        User user = userService.login(loginRequest.getUserId(), loginRequest.getPwd());
+        
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(401).body("아이디 또는 비밀번호가 틀렸습니다.");
+        }
     }
 }

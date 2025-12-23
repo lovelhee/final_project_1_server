@@ -12,4 +12,6 @@ public interface UserService {
 	List<User> getAllUsers();
 
 	boolean isUserIdDuplicated(String userId);
+	
+	User login(String userId, String pwd);
 }

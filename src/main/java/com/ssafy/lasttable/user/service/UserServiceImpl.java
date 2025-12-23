@@ -34,4 +34,13 @@ public class UserServiceImpl implements UserService {
 	public boolean isUserIdDuplicated(String userId) {
 	    return userMapper.checkUserIdExist(userId); // 중복된 아이디가 있으면 true
 	}
+	
+	@Override
+	public User login(String userId, String pwd) {
+	    User user = userMapper.getUserById(userId);
+	    if (user != null && user.getPwd().equals(pwd)) {
+	        return user;
+	    }
+	    return null;
+	}
 }
