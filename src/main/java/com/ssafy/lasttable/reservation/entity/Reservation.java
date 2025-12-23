@@ -8,7 +8,8 @@ public class Reservation {
 	private String canceledAt;
 	private int depositAmount;
 	private String createdAt;
-	private String img;
+	private Long menuId;
+	private Integer peopleCount;
 
 	public Long getReservationId() {
 		return reservationId;
@@ -66,11 +67,20 @@ public class Reservation {
 		this.createdAt = createdAt;
 	}
 
-	public String getImg() {
-		return img;
+	public Long getMenuId() {
+		return menuId;
 	}
 
-	public void setImg(String img) {
-		this.img = img;
+	public void setMenuId(Long menuId) {
+		this.menuId = menuId;
 	}
+
+	public Integer getPeopleCount() {
+		return peopleCount;
+	}
+
+	public void setPeopleCount(Integer peopleCount) {
+		this.peopleCount = peopleCount;
+	}
+
 }
