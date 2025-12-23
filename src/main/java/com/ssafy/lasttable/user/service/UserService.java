@@ -14,4 +14,6 @@ public interface UserService {
 	boolean isUserIdDuplicated(String userId);
 	
 	User login(String userId, String pwd);
+	
+	void updateName(String userId, String newName);
 }

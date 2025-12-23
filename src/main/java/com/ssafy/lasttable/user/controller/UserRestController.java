@@ -70,4 +70,12 @@ public class UserRestController {
             return ResponseEntity.status(401).body("로그인 실패: 아이디 또는 비밀번호가 틀립니다.");
         }
     }
+    
+    // 이름 수정을 위한 API 추가
+    @PutMapping("/{userId}/name")
+    public ResponseEntity<?> updateUserName(@PathVariable String userId, @RequestBody Map<String, String> body) {
+        String newName = body.get("name");
+        userService.updateName(userId, newName);
+        return ResponseEntity.ok("이름이 성공적으로 수정되었습니다.");
+    }
 }

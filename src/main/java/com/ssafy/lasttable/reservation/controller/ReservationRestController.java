@@ -82,4 +82,11 @@ public class ReservationRestController {
 		List<Reservation> list = reservationService.getLastTable();
 		return ResponseEntity.ok(list);
 	}
+	
+	// 특정 사용자의 예약 정보 조회 API 추가
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<List<Reservation>> getReservationsByUserId(@PathVariable("userId") String userId) {
+	    List<Reservation> userReservations = reservationService.getReservationsByUserId(userId);
+	    return ResponseEntity.ok(userReservations);
+	}
 }
