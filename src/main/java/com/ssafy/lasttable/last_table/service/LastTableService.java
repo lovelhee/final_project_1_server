@@ -10,4 +10,6 @@ public interface LastTableService {
     List<LastTableResponse> findByMenuId(Long menuId);
 
     List<LastTableResponse> findByUserId(String userId);
+    
+    LastTableResponse findByReservationId(Long reservationId);
 }

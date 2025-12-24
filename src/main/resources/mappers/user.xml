@@ -12,13 +12,26 @@
 	</insert>
 
 	<!-- 사용자 조회 (user_id로) -->
-	<select id="getUserById"
-		resultType="com.ssafy.lasttable.user.entity.User">
-		SELECT user_id, pwd, name, phone
-		FROM users
-		WHERE user_id =
-		#{userId};
+	<select id="getReservationsByUserId"
+		resultType="com.ssafy.lasttable.reservation.entity.Reservation">
+		SELECT *
+		FROM reservation
+		WHERE user_id = #{userId}
+		ORDER BY
+		CASE
+		WHEN canceled_at IS NULL THEN 0
+		ELSE 1
+		END,
+
+		CASE
+		WHEN reserved_at >=
+		CURDATE() THEN 0
+		ELSE 1
+		END,
+
+		reserved_at ASC
 	</select>
+
 
 	<!-- 모든 사용자 조회 -->
 	<select id="getAllUsers"
@@ -37,7 +50,8 @@
 	<update id="updateName">
 		UPDATE users
 		SET name = #{newName}
-		WHERE user_id = #{userId}
+		WHERE user_id =
+		#{userId}
 	</update>
 
 </mapper>

@@ -14,4 +14,6 @@ public interface LastTableMapper {
     List<LastTableResponse> findByMenuId(@Param("menuId") Long menuId);
 
     List<LastTableResponse> findByUserId(@Param("userId") String userId);
+    
+    LastTableResponse findByReservationId(@Param("reservationId") Long reservationId);
 }
