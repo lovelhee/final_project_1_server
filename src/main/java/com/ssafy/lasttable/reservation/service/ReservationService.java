@@ -16,5 +16,5 @@ public interface ReservationService {
 
 	List<Reservation> getReservationsByUserId(String userId);
 
-	Reservation claim(Long reservationId, String userId);
+	Reservation claim(Long reservationId, String userId, int depositAmount);
 }

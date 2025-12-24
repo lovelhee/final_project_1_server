@@ -100,7 +100,8 @@
 		END,
 
 		CASE
-		WHEN canceled_at IS NULL THEN 0
+		WHEN canceled_at IS
+		NULL THEN 0
 		ELSE 1
 		END,
 
@@ -114,8 +115,8 @@
 		UPDATE reservation
 		SET
 		user_id = #{userId},
-		status =
-		'RESERVED',
+		deposit_amount = #{depositAmount}, 
+		status = 'RESERVED',
 		canceled_at = NULL,
 		created_at = CURRENT_TIMESTAMP
 		WHERE

@@ -98,9 +98,10 @@ public class ReservationRestController {
 	        @RequestBody ReservationClaimRequest request
 	) {
 	    try {
-	        Reservation result = reservationService.claim(
+	    	Reservation result = reservationService.claim(
 	                reservationId,
-	                request.getUserId()
+	                request.getUserId(),
+	                request.getDepositAmount() 
 	        );
 	        return ResponseEntity.ok(result);
 

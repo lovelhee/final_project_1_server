@@ -3,29 +3,24 @@
 <mapper
 	namespace="com.ssafy.lasttable.last_table.repository.LastTableMapper">
 
-	<!-- 라스트테이블 전체 -->
 	<select id="findAllAvailable"
 		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
 		SELECT
 		r.reservation_id AS reservationId,
-		r.reserved_at AS
-		reservedAt,
+		r.reserved_at AS reservedAt,
 		r.people_count AS peopleCount,
-		r.deposit_amount AS
-		depositAmount,
-
+		r.deposit_amount AS depositAmount,
 		m.menu_id AS menuId,
 		m.name AS menuName,
-		m.price AS
-		menuPrice,
+		m.price AS menuPrice,
 		m.img AS menuImg,
 		m.description AS menuDescription
 		FROM
 		reservation r
 		JOIN menu m ON r.menu_id = m.menu_id
-		WHERE r.status =
-		'AVAILABLE'
-		AND r.reserved_at >= NOW()
+		WHERE r.status = 'AVAILABLE'
+		/* 현재 시간보다 이후이면서, 현재로부터 3일(72시간) 이내인 예약만 조회 */
+		AND r.reserved_at BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 DAY)
 		ORDER BY r.reserved_at ASC
 	</select>
 
@@ -89,20 +84,26 @@
 		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
 		SELECT
 		r.reservation_id AS reservationId,
-		r.reserved_at AS reservedAt,
+		r.reserved_at AS
+		reservedAt,
 		r.people_count AS peopleCount,
-		r.deposit_amount AS depositAmount,
+		r.deposit_amount AS
+		depositAmount,
 
 		m.menu_id AS menuId,
 		m.name AS menuName,
-		m.price AS menuPrice,
+		m.price AS
+		menuPrice,
 		m.img AS menuImg,
 		m.description AS menuDescription
-		FROM reservation r
+		FROM
+		reservation r
 		JOIN menu m ON r.menu_id = m.menu_id
-		WHERE r.reservation_id = #{reservationId}
+		WHERE
+		r.reservation_id = #{reservationId}
 		AND r.status = 'AVAILABLE'
-		AND r.reserved_at >= NOW()
+		AND
+		r.reserved_at >= NOW()
 	</select>
 
 

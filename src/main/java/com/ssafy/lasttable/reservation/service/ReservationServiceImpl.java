@@ -90,37 +90,30 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	@Transactional
-	public Reservation claim(Long reservationId, String userId) {
+	public Reservation claim(Long reservationId, String userId, int depositAmount) {
+		// 1. 사용자 존재 여부 체크
+		boolean userExists = reservationMapper.checkUserExists(userId);
+		if (!userExists) {
+			throw new IllegalArgumentException("존재하지 않는 사용자입니다");
+		}
 
-	    // 1. 사용자 존재 여부 체크
-	    boolean userExists = reservationMapper.checkUserExists(userId);
-	    if (!userExists) {
-	        throw new IllegalArgumentException("존재하지 않는 사용자입니다");
-	    }
+		// 2. 라스트테이블 인수 시도
+		int updated = reservationMapper.claimReservation(reservationId, userId, depositAmount);
 
-	    // 2. 라스트테이블 인수 시도
-	    int updated = reservationMapper.claimReservation(
-	            reservationId,
-	            userId
-	    );
+		// 3. 업데이트 실패 = 이미 누군가 선점
+		if (updated == 0) {
+			throw new IllegalStateException("이미 다른 사용자가 예약했습니다");
+		}
 
-	    // 3. 업데이트 실패 = 이미 누군가 선점
-	    if (updated == 0) {
-	        throw new IllegalStateException("이미 다른 사용자가 예약했습니다");
-	    }
+		// 4. 최신 데이터 반환
+		Reservation reservation = reservationMapper.findById(reservationId);
 
-	 // 4. 최신 데이터 반환
-	    Reservation reservation = reservationMapper.findById(reservationId);
-	    
-	    // 5. FCM 알림 전송
-	    if (reservation != null && reservation.getUserId() != null) {
-	        String reservationInfo = reservation.getReservedAt();
-	        fcmService.sendReservationCompleteNotification(
-	            reservation.getUserId(),
-	            reservationInfo
-	        );
-	    }
-	    
-	    return reservation;
+		// 5. FCM 알림 전송
+		if (reservation != null && reservation.getUserId() != null) {
+			String reservationInfo = reservation.getReservedAt();
+			fcmService.sendReservationCompleteNotification(reservation.getUserId(), reservationInfo);
+		}
+
+		return reservation;
 	}
 }
