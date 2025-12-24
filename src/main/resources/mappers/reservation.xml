@@ -26,7 +26,11 @@
 
 	<!-- 예약 전체 조회 -->
 	<select id="findAll" resultType="Reservation">
-		SELECT * FROM reservation
+		SELECT *
+		FROM reservation
+		WHERE
+		status = 'RESERVED'
+		AND canceled_at IS NULL
 		ORDER BY created_at DESC
 	</select>
 
@@ -34,8 +38,7 @@
 	<update id="cancelReservation">
 		UPDATE reservation
 		SET status = 'AVAILABLE',
-		canceled_at = #{canceledAt},
-		user_id = NULL
+		canceled_at = #{canceledAt}
 		WHERE reservation_id = #{reservationId}
 	</update>
 
@@ -49,14 +52,16 @@
 	<!-- 예약 ID로 예약 조회 -->
 	<select id="findById" resultType="Reservation">
 		SELECT * FROM reservation
-		WHERE reservation_id = #{reservationId}
+		WHERE
+		reservation_id = #{reservationId}
 	</select>
 
 	<!-- 특정 날짜의 예약된 시간 조회 -->
 	<select id="findReservedTimesByDate" resultType="String">
 		SELECT DATE_FORMAT(reserved_at, '%H:%i') as time
 		FROM reservation
-		WHERE DATE(reserved_at) = #{date}
+		WHERE
+		DATE(reserved_at) = #{date}
 		AND status = 'RESERVED'
 		<if test="menuId != null">
 			AND menu_id = #{menuId}
@@ -66,36 +71,55 @@
 
 	<!-- 중복 예약 체크 -->
 	<select id="checkDuplicateReservation" resultType="boolean">
-		SELECT COUNT(*) > 0
+		SELECT
+		COUNT(*) > 0
 		FROM reservation
 		WHERE reserved_at = #{reservedAt}
-		AND menu_id = #{menuId}
+		AND
+		menu_id = #{menuId}
 		AND status = 'RESERVED'
 	</select>
 
 	<!-- 사용자 존재 여부 확인 -->
 	<select id="checkUserExists" resultType="boolean">
 		SELECT COUNT(*) > 0
-		FROM users
+		FROM
+		users
 		WHERE user_id = #{userId}
 	</select>
 
 	<select id="getReservationsByUserId"
 		resultType="com.ssafy.lasttable.reservation.entity.Reservation">
-		SELECT * FROM reservation
+		SELECT *
+		FROM reservation
 		WHERE user_id = #{userId}
-		ORDER BY reserved_at DESC
+		ORDER BY
+		CASE
+		WHEN reserved_at >= NOW() THEN 0
+		ELSE 1
+		END,
+
+		CASE
+		WHEN canceled_at IS NULL THEN 0
+		ELSE 1
+		END,
+
+		reserved_at ASC
 	</select>
+
+
 
 	<!-- 라스트테이블 예약 인수 -->
 	<update id="claimReservation">
 		UPDATE reservation
 		SET
 		user_id = #{userId},
-		status = 'RESERVED',
+		status =
+		'RESERVED',
 		canceled_at = NULL,
 		created_at = CURRENT_TIMESTAMP
-		WHERE reservation_id = #{reservationId}
+		WHERE
+		reservation_id = #{reservationId}
 		AND status = 'AVAILABLE'
 	</update>
 

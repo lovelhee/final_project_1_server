@@ -8,18 +8,23 @@
 		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
 		SELECT
 		r.reservation_id AS reservationId,
-		r.reserved_at AS reservedAt,
+		r.reserved_at AS
+		reservedAt,
 		r.people_count AS peopleCount,
-		r.deposit_amount AS depositAmount,
+		r.deposit_amount AS
+		depositAmount,
 
 		m.menu_id AS menuId,
 		m.name AS menuName,
-		m.price AS menuPrice,
+		m.price AS
+		menuPrice,
 		m.img AS menuImg,
 		m.description AS menuDescription
-		FROM reservation r
+		FROM
+		reservation r
 		JOIN menu m ON r.menu_id = m.menu_id
-		WHERE r.status = 'AVAILABLE'
+		WHERE r.status =
+		'AVAILABLE'
 		AND r.reserved_at >= NOW()
 		ORDER BY r.reserved_at ASC
 	</select>
@@ -30,24 +35,57 @@
 		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
 		SELECT
 		r.reservation_id AS reservationId,
-		r.reserved_at AS reservedAt,
+		r.reserved_at AS
+		reservedAt,
 		r.people_count AS peopleCount,
-		r.deposit_amount AS depositAmount,
+		r.deposit_amount AS
+		depositAmount,
 
 		m.menu_id AS menuId,
 		m.name AS menuName,
-		m.price AS menuPrice,
+		m.price AS
+		menuPrice,
 		m.img AS menuImg,
 		m.description AS menuDescription
-		FROM reservation r
+		FROM
+		reservation r
 		JOIN menu m ON r.menu_id = m.menu_id
-		WHERE r.status = 'AVAILABLE'
+		WHERE r.status =
+		'AVAILABLE'
 		AND r.menu_id = #{menuId}
 		AND r.reserved_at >= NOW()
-		ORDER BY r.reserved_at ASC
+		ORDER BY
+		r.reserved_at ASC
 	</select>
 
 	<select id="findByUserId"
+		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
+		SELECT
+		r.reservation_id AS reservationId,
+		r.reserved_at AS
+		reservedAt,
+		r.people_count AS peopleCount,
+		r.deposit_amount AS
+		depositAmount,
+
+		m.menu_id AS menuId,
+		m.name AS menuName,
+		m.price AS
+		menuPrice,
+		m.img AS menuImg,
+		m.description AS menuDescription
+		FROM
+		reservation r
+		JOIN menu m ON r.menu_id = m.menu_id
+		WHERE r.status =
+		'AVAILABLE'
+		AND r.user_id = #{userId}
+		AND r.reserved_at >= NOW()
+		ORDER BY
+		r.reserved_at ASC
+	</select>
+
+	<select id="findByReservationId"
 		resultType="com.ssafy.lasttable.last_table.entity.LastTableResponse">
 		SELECT
 		r.reservation_id AS reservationId,
@@ -62,11 +100,11 @@
 		m.description AS menuDescription
 		FROM reservation r
 		JOIN menu m ON r.menu_id = m.menu_id
-		WHERE r.status = 'AVAILABLE'
-		AND r.user_id = #{userId}
+		WHERE r.reservation_id = #{reservationId}
+		AND r.status = 'AVAILABLE'
 		AND r.reserved_at >= NOW()
-		ORDER BY r.reserved_at ASC
 	</select>
+
 
 
 </mapper>

@@ -28,4 +28,9 @@ public class LastTableServiceImpl implements LastTableService {
     public List<LastTableResponse> findByUserId(String userId) {
         return lastTableMapper.findByUserId(userId);
     }
+
+	@Override
+	public LastTableResponse findByReservationId(Long reservationId) {
+		return lastTableMapper.findByReservationId(reservationId);
+	}
 }

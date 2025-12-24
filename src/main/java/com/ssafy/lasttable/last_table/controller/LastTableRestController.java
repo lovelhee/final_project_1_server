@@ -19,7 +19,14 @@ public class LastTableRestController {
     public ResponseEntity<List<LastTableResponse>> getAll() {
         return ResponseEntity.ok(lastTableService.findAll());
     }
-
+   
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<LastTableResponse> getByReservationId(
+            @PathVariable Long reservationId
+    ) {
+        return ResponseEntity.ok(lastTableService.findByReservationId(reservationId));
+    }
+    
     @GetMapping("/menu/{menuId}")
     public ResponseEntity<List<LastTableResponse>> getByMenuId(
             @PathVariable Long menuId
