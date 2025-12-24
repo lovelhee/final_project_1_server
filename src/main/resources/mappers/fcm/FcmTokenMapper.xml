@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.lasttable.fcm.repository.FcmTokenMapper">
+
+	<resultMap id="fcmTokenResultMap"
+		type="com.ssafy.lasttable.fcm.entity.FcmToken">
+
+		<id property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="token" column="token" />
+		<result property="updatedAt" column="updated_at" />
+	</resultMap>
+
+	<select id="selectByUserId" parameterType="java.lang.String"
+		resultMap="fcmTokenResultMap">
+		SELECT id, user_id, token, updated_at
+		FROM fcm_tokens
+		WHERE
+		user_id = #{userId}
+	</select>
+
+	<insert id="insertToken"
+		parameterType="com.ssafy.lasttable.fcm.entity.FcmToken"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO fcm_tokens (user_id,
+		token, updated_at)
+		VALUES (#{userId}, #{token}, NOW())
+	</insert>
+
+	<update id="updateToken"
+		parameterType="com.ssafy.lasttable.fcm.entity.FcmToken">
+		UPDATE fcm_tokens
+		SET token = #{token},
+		updated_at = NOW()
+		WHERE user_id = #{userId}
+	</update>
+
+	<delete id="deleteByUserId" parameterType="java.lang.String">
+		DELETE FROM fcm_tokens
+		WHERE user_id = #{userId}
+	</delete>
+
+</mapper>

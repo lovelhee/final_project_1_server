@@ -1,5 +1,6 @@
 package com.ssafy.lasttable.reservation.service;
 
+import com.ssafy.lasttable.fcm.service.FcmService;
 import com.ssafy.lasttable.reservation.entity.Reservation;
 import com.ssafy.lasttable.reservation.repository.ReservationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	private ReservationMapper reservationMapper;
+
+	@Autowired
+	private FcmService fcmService;
 
 	@Override
 	@Transactional
@@ -37,6 +41,13 @@ public class ReservationServiceImpl implements ReservationService {
 
 		// 3. 예약 생성
 		reservationMapper.insertReservation(reservation);
+
+		// 4. FCM 알림 전송
+		if (reservation.getUserId() != null) {
+			String reservationInfo = reservation.getReservedAt();
+			fcmService.sendReservationCompleteNotification(reservation.getUserId(), reservationInfo);
+		}
+
 		return reservationMapper.findById(reservation.getReservationId());
 	}
 
@@ -70,13 +81,12 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<Reservation> getLastTable() {
 		return reservationMapper.findLastTable();
 	}
-	
+
 	@Override
 	public List<Reservation> getReservationsByUserId(String userId) {
-	    // Mapper를 호출하여 DB에서 특정 사용자의 예약 목록을 가져옵니다.
-	    return reservationMapper.getReservationsByUserId(userId);
+		// Mapper를 호출하여 DB에서 특정 사용자의 예약 목록을 가져옵니다.
+		return reservationMapper.getReservationsByUserId(userId);
 	}
-	
 
 	@Override
 	@Transactional
@@ -99,8 +109,18 @@ public class ReservationServiceImpl implements ReservationService {
 	        throw new IllegalStateException("이미 다른 사용자가 예약했습니다");
 	    }
 
-	    // 4. 최신 데이터 반환
-	    return reservationMapper.findById(reservationId);
+	 // 4. 최신 데이터 반환
+	    Reservation reservation = reservationMapper.findById(reservationId);
+	    
+	    // 5. FCM 알림 전송
+	    if (reservation != null && reservation.getUserId() != null) {
+	        String reservationInfo = reservation.getReservedAt();
+	        fcmService.sendReservationCompleteNotification(
+	            reservation.getUserId(),
+	            reservationInfo
+	        );
+	    }
+	    
+	    return reservation;
 	}
-
 }
